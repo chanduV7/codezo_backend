@@ -21,7 +21,7 @@ const Register = async(req) => {
             password : hashedPass,
         }
     )
-    console.log(data)
+   
     return data;
 }
 
@@ -67,6 +67,10 @@ const updateUser = async(req) => {
     const userId = new mongodb.ObjectId(req.params.userId);
     return users.findOneAndUpdate({ _id : userId}, {$set:{...req.body}}, {new : true})
 }
+const deleteUser = async(req) => {
+    const userId = new mongodb.ObjectId(req.params.userId)
+    return users.findOneAndDelete({_id: userId})
+}
 
 module.exports = {
     Register,
@@ -74,5 +78,6 @@ module.exports = {
     loggedInUser,
     getUser,
     getAll,
-    updateUser
+    updateUser,
+    deleteUser
 }

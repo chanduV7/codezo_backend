@@ -1,5 +1,5 @@
 const { Router} = require("express");
-const { Register, Login, loggedInUser, getUser, getAll, updateUser } = require("../controller/userController");
+const { Register, Login, loggedInUser, getUser, getAll, updateUser, deleteUser } = require("../controller/userController");
 
 const userRouter = Router();
 
@@ -76,6 +76,24 @@ userRouter.patch("/updateUser/:userId", async(req,res) => {
         )
     }
 })
+
+
+
+userRouter.delete("/delete/:userId", async(req,res) => {
+    try {
+        if((!req.isAuth && req.access !== "admin") && req.access !== "recruitor") throw new Error("Unauthenticated");
+        const data = await deleteUser(req);
+        res.send(data);
+    } catch (error) {
+        res.send(
+            {
+                err : error.message
+            }
+        )
+    }
+})
+
+
 
 
 module.exports = userRouter;
