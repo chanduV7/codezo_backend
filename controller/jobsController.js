@@ -4,7 +4,7 @@ const mongoDb =  require("mongodb")
 const addJob = async(req) => {
     const addone = await jobs.insertOne(req.body);
     const jobId = addone.insertedId;
-    const cid = new mongoDb.ObjectId(req.body.company);
+    const cid = new mongoDb.ObjectId(req.body.cid);
    
      const d = await company.updateOne(
         { _id:cid},
