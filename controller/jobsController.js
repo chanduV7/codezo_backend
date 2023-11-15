@@ -36,7 +36,22 @@ const modify= async(req) => {
 
 const del = async(req) => {
     const jobId = new mongoDb.ObjectId(req.params.jobId);
-    return jobs.findOneAndDelete({_id: jobId})
+    const cid = new mongoDb.ObjectId(req.params.cid); 
+    
+    return { one :jobs.findOneAndDelete({_id: jobId})
+,
+ two :company.updateOne(
+        {
+            _id : cid
+        },
+        {
+            $pull : {
+                jobs : jobId
+            }
+        },
+        {
+            new : true
+        })}
 }
 module.exports = {
     addJob,

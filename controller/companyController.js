@@ -7,6 +7,10 @@ const addCompany = async(req) => {
     return addone;
 }
 
+const getOneCompany = async(req) => {
+    const cid = new mongodb.ObjectId(req.params.cid);
+    return company.findOne({ _id : cid})
+}
 const getAllCompany = () => {
     return company.find({}).toArray();
 }
@@ -14,7 +18,6 @@ const getAllCompany = () => {
 const getCompanyJobs = async(req) => {
   const companyId = new mongodb.ObjectId(req.params.cid);
   const companyData = await company.findOne(companyId);
-  console.log(companyData);
   const jobIds = companyData.jobs;
   const jobsPromise = jobIds.map((e) => jobs.findOne(e));
   return Promise.allSettled(jobsPromise);
@@ -30,5 +33,6 @@ module.exports = {
     addCompany,
     getAllCompany,
     getCompanyJobs,
-    deleteCompany
+    deleteCompany,
+    getOneCompany
 }

@@ -1,5 +1,5 @@
 const {Router} = require("express");
-const { addCompany, getAllCompany, getCompanyJobs, deleteCompany,  } = require("../controller/companyController");
+const { addCompany, getAllCompany, getCompanyJobs, deleteCompany, getOneCompany,  } = require("../controller/companyController");
 const companyRouter = Router();
 
 
@@ -39,6 +39,14 @@ companyRouter.delete("/delete/:cid", async(req,res) => {
     } catch (error) {
         res.send({Error : error.message})
         
+    }
+})
+companyRouter.get("/getCompany/:cid", async(req,res) => {
+    try {
+        const data = await getOneCompany(req);
+        res.send(data)
+    } catch (error) {
+        res.send({Error : error.message})
     }
 })
 

@@ -6,7 +6,6 @@ JobRouter.post("/add",async(req,res) => {
     try {
         console.log(req);
         if((!req.isAuth && req.access !== "admin") && req.access !== "recruitor") throw new Error("Unauthenticated");
-        
         const data = await addJob(req);
         res.send(data);
     } catch (error) {
@@ -44,7 +43,7 @@ JobRouter.patch("/modify/:jobId",async(req,res) => {
     }
 })
 
-JobRouter.delete("/delete/:jobId",async(req,res) => {
+JobRouter.delete("/delete/:jobId/:cid",async(req,res) => {
     try {
         if(!req.isAuth && req.access !== "admin") throw new Error("Unauthenticated");
         const data = await del(req);
