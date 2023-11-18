@@ -1,6 +1,6 @@
 const {Router}  = require("express");
 const JobRouter = Router();
-const { addJob, modify, getAll, getOne, del} = require("../controller/jobsController");
+const { addJob, modify, getAll, getOne, del, saveJob} = require("../controller/jobsController");
 
 JobRouter.post("/add",async(req,res) => {
     try {
@@ -43,10 +43,10 @@ JobRouter.patch("/modify/:jobId",async(req,res) => {
     }
 })
 
-JobRouter.delete("/delete/:jobId/:cid",async(req,res) => {
+JobRouter.post("/saveJob",async(req,res) => {
     try {
-        if(!req.isAuth && req.access !== "admin") throw new Error("Unauthenticated");
-        const data = await del(req);
+        // if(!req.isAuth ) throw new Error("Unauthenticated");
+        const data = await saveJob(req);
         res.send(data);
     } catch (error) {
         res.send({Err : error.message})

@@ -1,5 +1,5 @@
 const {Router} = require("express");
-const { addCompany, getAllCompany, getCompanyJobs, deleteCompany, getOneCompany,  } = require("../controller/companyController");
+const { addCompany, getAllCompany, getCompanyJobs, deleteCompany, getOneCompany, followCompany,  } = require("../controller/companyController");
 const companyRouter = Router();
 
 
@@ -50,5 +50,14 @@ companyRouter.get("/getCompany/:cid", async(req,res) => {
     }
 })
 
+companyRouter.post("/followComp/:cid/:userId",async(req,res) => {
+    try {
+       
+        const data = await followCompany(req);
+        res.send(data);
+    } catch (error) {
+        res.send({Err : error.message})
+    }
+})
 
 module.exports = companyRouter;

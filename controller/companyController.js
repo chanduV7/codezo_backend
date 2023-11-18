@@ -1,5 +1,5 @@
 
-const {company,jobs} = require("../mongoConfig");
+const {company,jobs, users} = require("../mongoConfig");
 const mongodb = require("mongodb")
 
 const addCompany = async(req) => {
@@ -27,11 +27,26 @@ const deleteCompany = async(req) => {
    const cid = new mongodb.ObjectId(req.params.cid);
    return company.findOneAndDelete({_id : cid})
 }
-
+const followCompany = async (req) => {
+    const cid = new mongodb.ObjectId(req.params.cid);
+    const userId = new mongodb.ObjectId(req.params.userId)
+    return users.updateOne(
+        { _id : userId },
+        {
+            $push : {
+                followingComp : cid
+            }
+        },
+        {
+          new : true
+        }
+    )
+};
 
 module.exports = {
     addCompany,
     getAllCompany,
+    followCompany,
     getCompanyJobs,
     deleteCompany,
     getOneCompany
