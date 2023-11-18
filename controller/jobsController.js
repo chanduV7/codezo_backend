@@ -12,7 +12,7 @@ const addJob = async (req) => {
       $push: {
         jobs: jobId,
       },
-    },
+        },
     {
       new: true,
     }
@@ -61,8 +61,9 @@ const del = async (req) => {
 };
 
 const saveJob = async (req) => {
-    const jobId = (req.body.jobId);
-    const userId = new mongoDb.ObjectId(req.body.userId);
+  console.log(req);
+    const jobId = (req.params.jobId);
+    const userId = new mongoDb.ObjectId(req.userId);
     return users.updateOne(
         { _id : userId },
         {
@@ -75,8 +76,18 @@ const saveJob = async (req) => {
         }
     )
 };
+
+const getUserSavedJobs =async (req) => {
+  
+  const userId =  new mongoDb.ObjectId(req.params.userId);
+  const userData = await  users.findOne({_id : userId});
+  const jobIds = userData.savedjobs;
+  const jobPromise = jobIds.map(e => jobs.findOne({ _id : new mongoDb.ObjectId(e)})) 
+  return await Promise.allSettled(jobPromise)
+}
 module.exports = {
   addJob,
+  getUserSavedJobs,
   saveJob,
   modify,
   getAll,

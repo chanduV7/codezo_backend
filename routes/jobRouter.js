@@ -1,6 +1,6 @@
 const {Router}  = require("express");
 const JobRouter = Router();
-const { addJob, modify, getAll, getOne, del, saveJob} = require("../controller/jobsController");
+const { addJob, modify, getAll, getOne, del, saveJob, getUserSavedJobs} = require("../controller/jobsController");
 
 JobRouter.post("/add",async(req,res) => {
     try {
@@ -43,9 +43,20 @@ JobRouter.patch("/modify/:jobId",async(req,res) => {
     }
 })
 
-JobRouter.post("/saveJob",async(req,res) => {
+JobRouter.delete("/delete/:jobId/:userId",async(req,res) => {
     try {
-        // if(!req.isAuth ) throw new Error("Unauthenticated");
+        if(!req.isAuth && req.access !== "admin") throw new Error("Unauthenticated");
+        const data = await del(req);
+        res.send(data);
+    } catch (error) {
+        res.send({Err : error.message})
+    }
+})
+
+JobRouter.post("/saveJob/:jobId",async(req,res) => {
+    try {
+        console.log(req);
+        if(!req.isAuth ) throw new Error("Unauthenticated");
         const data = await saveJob(req);
         res.send(data);
     } catch (error) {
@@ -53,4 +64,13 @@ JobRouter.post("/saveJob",async(req,res) => {
     }
 })
 
+JobRouter.get("/savedJobs/All/:userId",async(req,res) => {
+    try {
+       
+        const data = await getUserSavedJobs(req);
+        res.send(data);
+    } catch (error) {
+        res.send({Err : error.message})
+    }
+})
 module.exports = JobRouter;
