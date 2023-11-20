@@ -3,7 +3,7 @@ const CryptoJS = require("crypto-js");
 module.exports = (req, res, next) => {
   try {
     const authHeader = req.get("Authorization");
-    console.log((authHeader));
+   
     if (!authHeader) throw new Error("Authorization not present");
     const token = authHeader.split(" ")[1];
     if (!token) throw new Error("Token not present");

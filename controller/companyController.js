@@ -28,13 +28,17 @@ const deleteCompany = async(req) => {
    return company.findOneAndDelete({_id : cid})
 }
 const followCompany = async (req) => {
-    const cid = new mongodb.ObjectId(req.params.cid);
-    const userId = new mongodb.ObjectId(req.params.userId)
+    const cid = (req.params.cid);
+    const userId = new mongodb.ObjectId(req.userId);
+    const userData = await users.findOne({_id : userId});
+    const cidsArr = userData.companyfollowing;
+    const cids = cidsArr.filter((e) => e==cid);
+    if(cids.length) throw new Error("Company Already Following")
     return users.updateOne(
         { _id : userId },
         {
             $push : {
-                followingComp : cid
+                companyfollowing : cid
             }
         },
         {

@@ -1,4 +1,4 @@
-const { jobs, company ,users} = require("../mongoConfig");
+const { jobs, company, users } = require("../mongoConfig");
 const mongoDb = require("mongodb");
 
 const addJob = async (req) => {
@@ -12,7 +12,7 @@ const addJob = async (req) => {
       $push: {
         jobs: jobId,
       },
-        },
+    },
     {
       new: true,
     }
@@ -61,33 +61,35 @@ const del = async (req) => {
 };
 
 const saveJob = async (req) => {
- 
-    const jobId = (req.params.jobId);
-    const userId = new mongoDb.ObjectId(req.userId);
-    const userData = await users.findOne({ _id : userId})
-    const jobIdsArr = userData.savedjobs;
-    const jobIds = jobIdsArr.filter((e) => e==jobId)
-    if(jobIds.length) throw new Error("Job ALready Saved")
-    return users.updateOne(
-        { _id : userId },
-        {
-            $push : {
-                savedjobs : jobId
-            }
-        },
-        {
-          new : true
-        }
-    )
+  const jobId = (req.params.jobId);
+  const userId = new mongoDb.ObjectId(req.userId);
+
+  const userData = await users.findOne({ _id: userId });
+  const jobIdsArr = userData.savedjobs;
+  const jobIds = jobIdsArr.filter((e) => e == jobId);
+  if (jobIds.length) throw new Error("Job ALready Saved");
+  return users.updateOne(
+    { _id: userId },
+    {
+      $push: {
+        savedjobs: jobId,
+      },
+    },
+    {
+      new: true,
+    }
+  );
 };
 
-const getUserSavedJobs =async (req) => {
-  const userId =  new mongoDb.ObjectId(req.params.userId);
-  const userData = await  users.findOne({_id : userId});
+const getUserSavedJobs = async (req) => {
+  const userId = new mongoDb.ObjectId(req.params.userId);
+  const userData = await users.findOne({ _id: userId });
   const jobIds = userData.savedjobs;
-  const jobPromise = jobIds.map(e => jobs.findOne({ _id : new mongoDb.ObjectId(e)})) 
-  return await Promise.allSettled(jobPromise)
-}
+  const jobPromise = jobIds.map((e) =>
+    jobs.findOne({ _id: new mongoDb.ObjectId(e) })
+  );
+  return await Promise.allSettled(jobPromise);
+};
 module.exports = {
   addJob,
   getUserSavedJobs,

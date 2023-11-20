@@ -19,6 +19,8 @@ const Register = async(req) => {
         {
             ...req.body,
             password : hashedPass,
+            savedjobs: [],
+            companyfollowing : []
         }
     )
    

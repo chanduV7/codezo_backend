@@ -14,6 +14,7 @@ companyRouter.post("/add",async(req,res) => {
 })
 companyRouter.get("/getall",async(req,res) => {
     try {
+        // if(!req.isAuth) throw new Error("Unauthenticated");
         const data = await getAllCompany(req);
         res.send(data)
     } catch (error) {
@@ -50,7 +51,7 @@ companyRouter.get("/getCompany/:cid", async(req,res) => {
     }
 })
 
-companyRouter.post("/followComp/:cid/:userId",async(req,res) => {
+companyRouter.post("/followComp/:cid",async(req,res) => {
     try {
        
         const data = await followCompany(req);
