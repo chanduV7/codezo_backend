@@ -61,9 +61,13 @@ const del = async (req) => {
 };
 
 const saveJob = async (req) => {
-  console.log(req);
+ 
     const jobId = (req.params.jobId);
     const userId = new mongoDb.ObjectId(req.userId);
+    const userData = await users.findOne({ _id : userId})
+    const jobIdsArr = userData.savedjobs;
+    const jobIds = jobIdsArr.filter((e) => e==jobId)
+    if(jobIds.length) throw new Error("Job ALready Saved")
     return users.updateOne(
         { _id : userId },
         {
@@ -78,7 +82,6 @@ const saveJob = async (req) => {
 };
 
 const getUserSavedJobs =async (req) => {
-  
   const userId =  new mongoDb.ObjectId(req.params.userId);
   const userData = await  users.findOne({_id : userId});
   const jobIds = userData.savedjobs;

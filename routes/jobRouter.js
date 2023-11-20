@@ -55,7 +55,7 @@ JobRouter.delete("/delete/:jobId/:userId",async(req,res) => {
 
 JobRouter.post("/saveJob/:jobId",async(req,res) => {
     try {
-        console.log(req);
+       
         if(!req.isAuth ) throw new Error("Unauthenticated");
         const data = await saveJob(req);
         res.send(data);
@@ -64,9 +64,9 @@ JobRouter.post("/saveJob/:jobId",async(req,res) => {
     }
 })
 
-JobRouter.get("/savedJobs/All/:userId",async(req,res) => {
+JobRouter.get("/savedJobs/all/:userId",async(req,res) => {
     try {
-       
+        if(!req.isAuth ) throw new Error("Unauthenticated");
         const data = await getUserSavedJobs(req);
         res.send(data);
     } catch (error) {
